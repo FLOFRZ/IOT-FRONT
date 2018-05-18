@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body>
+<div class="row">
+    <div class="col-md-6">
+        <h2> Chat </h2> <label>  </label>
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Pseudo</label>
+                <input type="text" class="form-control" id="pseudo" placeholder="Enter pseudo">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Message</label>
+                <input type="text" class="form-control" id="message" placeholder="Message">
+            </div>
+            <button type="submit" class="btn btn-primary submit" >Submit</button>
+        </form>
+
+    </div>
+    <label id="live">  </label>
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Discution :</label>
+        <ul class="list">
+
+        </ul>
+    </div>
+
+
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="http://localhost:1337/dependencies/sails.io.js"></script>
+<script type="text/javascript">
+    io.sails.url = 'http://localhost:1337';
+</script>
+<script type="text/javascript">
+    $('document').ready(function(){
+        io.socket.get('/message', function(resData){
+            console.log(resData)
+            for (i=0; i < resData.length; i++){
+                addToList(resData[i].text)
+            }
+        })
+        io.socket.on('message', function(msg){
+            addToList(msg.data.text)
+            console.log(msg)
+        })
+    })
+
+    $(".submit").click(function(){
+        if ($("#pseudo").val() != "" && $("#message").val() != ""){
+            io.socket.post('/message', {
+                text : $("#message").val(),
+                pseudo : $("#pseudo").val()
+            }, function(res){
+                console.log(res)
+            })
+        }
+    })
+
+    function addToList(email){
+        $('.list').append('<li>' + email + '</li>')
+    }
+</script>
+</html>

@@ -1,0 +1,32 @@
+<!--
+  Generated template for the UserPage page.
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title *ngIf="user">Babyfoot {{user.firstName}} {{user.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-card *ngFor="let item of allFussballTables">
+
+      <ion-card-header>
+        Baby {{item.id}} -  Emplacement: {{item.lieux}}
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <button ion-button round *ngIf=" item.available == true " (click)="btnSelected(item)">Jouer</button>
+        <p *ngIf=" item.available == false " > Occupé  </p>
+
+      </ion-card-content>
+
+    </ion-card>
+  </ion-list>
+</ion-content>
